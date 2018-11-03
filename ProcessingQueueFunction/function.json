@@ -5,13 +5,13 @@
       "name": "msg",
       "type": "queueTrigger",
       "direction": "in",
-      "queueName": "itemsqueue",
+      "queueName": "fibonaccicalculatorqueue",
       "connection": "AzureWebJobsStorage"
     },
     {
       "name": "$return",
       "type": "cosmosDB",
-      "databaseName": "processes",
+      "databaseName": "processeditems",
       "collectionName": "processeditems",
       "createIfNotExists": true,
       "connectionStringSetting": "DbConnectionString",
