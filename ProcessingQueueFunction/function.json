@@ -7,6 +7,15 @@
       "direction": "in",
       "queueName": "itemsqueue",
       "connection": "AzureWebJobsStorage"
+    },
+    {
+      "name": "$return",
+      "type": "cosmosDB",
+      "databaseName": "processes",
+      "collectionName": "processeditems",
+      "createIfNotExists": true,
+      "connectionStringSetting": "DbConnectionString",
+      "direction": "out"
     }
   ]
 }
