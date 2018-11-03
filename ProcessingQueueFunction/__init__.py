@@ -19,7 +19,7 @@ def main(msg: func.QueueMessage) -> func.Document:
     logging.info('Python queue trigger function processed a queue item: %s', msg.get_body().decode('utf-8'))
     
     # Create some CPU load
-    fibo =  fibonacci(requestedValue) 
+    fibo =  str(fibonacci(requestedValue)) 
 
     stop = datetime.utcnow()
 
