@@ -13,8 +13,11 @@ class DocumentData(): pass
 def doMath():
     getcontext().prec=100
 
-    for x in range(1000000):
+    for x in range(10000):
         result = sum(1/Decimal(16)**k * (Decimal(4)/(8*k+1) - Decimal(2)/(8*k+4) - Decimal(1)/(8*k+5) - Decimal(1)/(8*k+6)) for k in range(100))
+        if x % 200 == 0:
+            logging.info(f"x is {x}")
+
     return str(result)
 
 def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
