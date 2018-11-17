@@ -42,7 +42,7 @@ def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
         data.plataform = sys.platform
         data.node = platform.node()
         data.result = result
-        data.version = "8.HTTP" # Identifyier to filter logs
+        data.version = "9.HTTP" # Identifyier to filter logs
 
         jsonData = json.dumps(data.__dict__)
         logging.info(jsonData)

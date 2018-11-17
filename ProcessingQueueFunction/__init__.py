@@ -20,8 +20,8 @@ def doMath():
 
     return str(result)
 
-def main(msg: func.QueueMessage) -> func.Document:
-    logging.info('Python HTTP trigger function processed a request.')
+def main(msg: func.QueueMessage):
+    logging.info('Python QUEUE trigger function processed a request.')
     startTime = datetime.utcnow()
     # try:
 
@@ -44,7 +44,7 @@ def main(msg: func.QueueMessage) -> func.Document:
     data.plataform = sys.platform
     data.node = platform.node()
     data.result = result
-    data.version = "8.QUEUE" # Identifyier to filter logs
+    data.version = "9.QUEUE" # Identifyier to filter logs
 
     stopTime = datetime.utcnow()
     data.stop = f'{stopTime:%Y-%m-%d %H:%M:%S.%f%z}'
@@ -54,8 +54,8 @@ def main(msg: func.QueueMessage) -> func.Document:
     logging.info(jsonData)
     
     # DB document
-    doc = func.Document.from_json(jsonData)
-    return doc
+    # doc = func.Document.from_json(jsonData)
+    # return doc
     # except Exception as e:
     #     logging.error(f'"Error": "{str(e)}"')
     #     return func.Document.from_json(f'"Error": "{str(e)}"')

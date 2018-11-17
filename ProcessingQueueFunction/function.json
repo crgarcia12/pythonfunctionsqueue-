@@ -7,15 +7,6 @@
       "direction": "in",
       "queueName": "fibonaccicalculatorqueue",
       "connection": "AzureWebJobsStorage"
-    },
-    {
-      "name": "$return",
-      "type": "cosmosDB",
-      "databaseName": "processeditems",
-      "collectionName": "processeditems",
-      "createIfNotExists": true,
-      "connectionStringSetting": "DbConnectionString",
-      "direction": "out"
     }
   ]
 }
