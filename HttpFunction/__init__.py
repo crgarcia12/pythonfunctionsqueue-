@@ -15,7 +15,7 @@ def doMath():
 
     for x in range(10000):
         result = sum(1/Decimal(16)**k * (Decimal(4)/(8*k+1) - Decimal(2)/(8*k+4) - Decimal(1)/(8*k+5) - Decimal(1)/(8*k+6)) for k in range(100))
-        if x % 200 == 0:
+        if x % 2000 == 0:
             logging.info(f"x is {x}")
 
     return str(result)
@@ -31,6 +31,7 @@ def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
         args = sys.argv
 
         data = DocumentData()
+        data.type = "http"
         data.start = f'{startTime:%Y-%m-%d %H:%M:%S.%f%z}' 
         data.stop = f'{stopTime:%Y-%m-%d %H:%M:%S.%f%z}'
         data.durationSeconds = (stopTime-startTime).total_seconds()
@@ -41,7 +42,7 @@ def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
         data.plataform = sys.platform
         data.node = platform.node()
         data.result = result
-        data.version = "1" # Identifyier to filter logs
+        data.version = "8.HTTP" # Identifyier to filter logs
 
         jsonData = json.dumps(data.__dict__)
         logging.info(jsonData)
