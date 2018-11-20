@@ -7,7 +7,8 @@ import timeit
 from datetime import datetime
 import json
 from decimal import Decimal, getcontext
-#from azure.storage.queue import QueueService
+from azure.storage.queue import QueueService
+import os
 
 class DocumentData(): pass
 
@@ -58,7 +59,8 @@ def processMessage(data: DocumentData, startTime: datetime):
     stopTime = datetime.utcnow()
     
     # Calculating queue size
-    # queue_service = QueueService(account_name='funcpyqueue2storage', account_key='3oWbigAq2HDjcwXRkftTC8zm++rz7ToB6A0Ng9FwTN1e4tFS/lWIL4zF9cfE9UPvOO/j++vkpj44329W4nRNhA==')
+    storageKey = os.environ['StorageKey']
+    # queue_service = QueueService(account_name='funcpyqueue2storage', account_key=storageKey)
     # metadata = queue_service.get_queue_metadata('fibonaccicalculatorqueue')
     # data.queuedMessages = metadata.approximate_message_count
 
