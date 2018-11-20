@@ -10,6 +10,24 @@ from decimal import Decimal, getcontext
 
 class DocumentData(): pass
 
+def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
+    startTime = datetime.utcnow()
+    logging.info('Python HTTP trigger function processed a request.')
+
+    data = DocumentData()
+    data.type = "queue"
+    data.messageId = context.invocation_id
+    data.msgInsertionTime = req.params.get('insertionTime')
+
+    processMessage(data, startTime)
+
+    messageInsertionTime = datetime.strptime(data.msgInsertionTime, '%Y-%m-%d %H:%M:%S')
+    data.delayInStartProcessingFromInserted = (startTime - startTime).total_seconds()
+
+    jsonData = json.dumps(data.__dict__)
+    logging.info(jsonData)
+    return func.HttpResponse(jsonData)
+    
 def doMath():
     getcontext().prec=100
 
@@ -20,32 +38,27 @@ def doMath():
 
     return str(result)
 
-def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
+def processMessage(data: DocumentData, startTime: datetime):
+    startTime = datetime.utcnow()
+    result = doMath()
+    result = 0
 
-    try:
-        startTime = datetime.utcnow()
-        result = doMath()
-        stopTime = datetime.utcnow()
+    args = sys.argv
+   
+    data.start = f'{startTime:%Y-%m-%d %H:%M:%S.%f%z}' 
+    data.host = args[2]
+    data.port = args[4]
+    data.worker = args[6]
+    data.request = args[8]
+    data.plataform = sys.platform
+    data.node = platform.node()
+    data.result = result
+    data.version = "12" # Identifyier to filter logs
 
-        args = sys.argv
-
-        data = DocumentData()
-        data.type = "http"
-        data.start = f'{startTime:%Y-%m-%d %H:%M:%S.%f%z}' 
-        data.stop = f'{stopTime:%Y-%m-%d %H:%M:%S.%f%z}'
-        data.durationSeconds = (stopTime-startTime).total_seconds()
-        data.host = args[2]
-        data.port = args[4]
-        data.worker = args[6]
-        data.request = args[8]
-        data.plataform = sys.platform
-        data.node = platform.node()
-        data.result = result
-        data.version = "9.HTTP" # Identifyier to filter logs
-
-        jsonData = json.dumps(data.__dict__)
-        logging.info(jsonData)
-        return func.HttpResponse(jsonData)
-    except Exception as e:
-        return func.HttpResponse( f"<p>Error: {str(e)}</p>")
+    stopTime = datetime.utcnow()
+    
+    # Calculate times
+    messageInsertionTime = datetime.strptime(data.msgInsertionTime, '%Y-%m-%d %H:%M:%S')
+    data.stop = f'{stopTime:%Y-%m-%d %H:%M:%S.%f%z}'
+    data.durationSeconds = (stopTime-startTime).total_seconds()
+    data.delayInStartProcessingFromMessage = (startTime - messageInsertionTime).total_seconds()
