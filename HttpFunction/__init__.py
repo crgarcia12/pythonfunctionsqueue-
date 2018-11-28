@@ -7,27 +7,27 @@ import timeit
 from datetime import datetime
 import json
 from decimal import Decimal, getcontext
-import os
-from azure.storage.queue import QueueService
 
 class DocumentData(): pass
 
-def main(msg: func.QueueMessage):
+def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
     startTime = datetime.utcnow()
-    logging.info('Python QUEUE trigger function processed a request.')
+    logging.info('Python HTTP trigger function processed a request.')
+
     data = DocumentData()
     data.type = "queue"
-    data.messageId = msg.id
-    data.queueInsertionTime = f'{msg.insertion_time:%Y-%m-%d %H:%M:%S.%f%z}'
-    data.msgInsertionTime = msg.get_body().decode('utf-8')
+    data.messageId = context.invocation_id
+    data.msgInsertionTime = req.params.get('insertionTime')
 
     processMessage(data, startTime)
 
     messageInsertionTime = datetime.strptime(data.msgInsertionTime, '%Y-%m-%d %H:%M:%S')
-    data.delayInStartProcessingFromInserted = (startTime - messageInsertionTime).total_seconds()
+    data.delayInStartProcessingFromInserted = (startTime - startTime).total_seconds()
 
     jsonData = json.dumps(data.__dict__)
     logging.info(jsonData)
+    return func.HttpResponse(jsonData)
+    
     
 def doMath():
     getcontext().prec=100
@@ -63,7 +63,7 @@ def processMessage(data: DocumentData, startTime: datetime):
     data.queuedMessages = metadata.approximate_message_count
 
     stopTime = datetime.utcnow()
-
+    
     # Calculate times
     messageInsertionTime = datetime.strptime(data.msgInsertionTime, '%Y-%m-%d %H:%M:%S')
     data.stop = f'{stopTime:%Y-%m-%d %H:%M:%S.%f%z}'

@@ -4,4 +4,5 @@ grpcio==1.14.2
 grpcio-tools==1.14.2
 protobuf==3.6.1
 six==1.11.0
-
+azure-storage-queue==1.4.0
+azure==4.0.0
