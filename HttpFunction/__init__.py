@@ -28,6 +28,7 @@ def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
     logging.info(jsonData)
     return func.HttpResponse(jsonData)
     
+    
 def doMath():
     getcontext().prec=100
 
@@ -53,7 +54,13 @@ def processMessage(data: DocumentData, startTime: datetime):
     data.plataform = sys.platform
     data.node = platform.node()
     data.result = result
-    data.version = "12" # Identifyier to filter logs
+    data.version = "13" # Identifyier to filter logs
+  
+    # Calculating queue size
+    storageKey = os.environ['StorageKey']
+    queue_service = QueueService(account_name='funcpyqueue2storage', account_key=storageKey)
+    metadata = queue_service.get_queue_metadata('fibonaccicalculatorqueue')
+    data.queuedMessages = metadata.approximate_message_count
 
     stopTime = datetime.utcnow()
     

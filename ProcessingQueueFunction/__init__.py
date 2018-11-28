@@ -54,7 +54,7 @@ def processMessage(data: DocumentData, startTime: datetime):
     data.plataform = sys.platform
     data.node = platform.node()
     data.result = result
-    data.version = "12" # Identifyier to filter logs
+    data.version = "13" # Identifyier to filter logs
   
     # Calculating queue size
     storageKey = os.environ['StorageKey']
@@ -63,7 +63,7 @@ def processMessage(data: DocumentData, startTime: datetime):
     data.queuedMessages = metadata.approximate_message_count
 
     stopTime = datetime.utcnow()
-    
+
     # Calculate times
     messageInsertionTime = datetime.strptime(data.msgInsertionTime, '%Y-%m-%d %H:%M:%S')
     data.stop = f'{stopTime:%Y-%m-%d %H:%M:%S.%f%z}'
